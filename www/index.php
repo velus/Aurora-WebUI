@@ -44,14 +44,14 @@ include("languages/translator.php");
 include("templates/templates.php");
 
 
-if ($_GET[page] != '') {
-    $_SESSION[page] = $_GET[page];
+if (isset($_GET['page'])) {
+    $_SESSION['page'] = $_GET['page'];
 } else {
-    $_SESSION[page] = 'home';
+    $_SESSION['page'] = 'home';
 }
 
 //LOGIN AUTHENTIFICATION
-if ($_POST[Submit] == $webui_login) {
+if (isset($_POST['Submit']) && $_POST['Submit'] == $webui_login) {
 
     $found = array();
     $found[0] = json_encode(array('Method' => 'Login', 'WebPassword' => md5(WEBUI_PASSWORD),
@@ -82,7 +82,7 @@ if ($_POST[Submit] == $webui_login) {
     }
 }
 
-if ($_POST[Submit] == $webui_admin_login) {
+if (isset($_POST['Submit']) && $_POST['Submit'] == $webui_admin_login) {
 
     $found = array();
     $found[0] = json_encode(array('Method' => 'AdminLogin', 'WebPassword' => md5(WEBUI_PASSWORD),
@@ -157,7 +157,6 @@ if ($_POST[Submit] == $webui_admin_login) {
   <title><? echo $webui_welcome; ?> <?= SYSNAME ?></title>
   <script src="javascripts/modernizr-1.7.min.js" type="text/javascript"></script>
   <script src="javascripts/global.js" type="text/javascript"></script>
-  <script src="javascripts/droppanel/dropdown.js" type="text/javascript"></script>
     
   <script src="javascripts/jquery/jquery.min.js" type="text/javascript"></script>
   <script src="javascripts/jquery/slidepanel.js" type="text/javascript"></script>
@@ -601,7 +600,7 @@ $(document).ready(function(){
 <div id="container">
     <div id="header">
         <div id="headerimages">
-            <a href="<?php echo SYSURL ?>"><h1><?php echo SYSNAME ?></h1></a>
+            <a href="<?php echo SYSURL; ?>index.php?page=home"><h1><?php echo SYSNAME; ?></h1></a>
         </div>
         <!-- <div id="gridstatus"><?php //php include("sites/gridstatus.php"); ?></div> -->
              <div id="home_content_right"><?php include("sites/modules/slideshow.php"); ?></div>
