@@ -20,6 +20,16 @@ else
 ob_start();
 session_start();
 
+//start up smarty
+include('inc/smarty/Smarty.class.php');
+$smarty = new Smarty;
+$smarty->template_dir = 'inc/theme';
+$smarty->compile_dir = 'inc/theme_c';
+$smarty->config_dir = 'inc/configs';
+
+// display it
+$smarty->display('index.tpl');
+
 echo "<!doctype html>";
 
 if ((empty($_GET['lang'])) && (empty($_COOKIE['lang'])))
