@@ -13,7 +13,11 @@ function validate(form)
 			{
 				if (form.elements[i].attributes["nospecial"].value == "true")
 				{                      
+<<<<<<< HEAD
 					if(form.elements[i].value.match("/[A-Z_a-z_0-9_@]/g").length != form.elements[i].value.length)
+=======
+					if(form.elements[i].value.match("/[A-z_0-9]/g").length != form.elements[i].value.length)
+>>>>>>> 12123c3b8128cf947f13f6cd05ec99db46f3842d
 					return false;                  
 				}
 			}
