@@ -579,9 +579,9 @@ $(document).ready(function(){
 <?php if($displayWelcomeMessage) { ?>
   <div id="welcomeText">
     <?php
-      if($_SESSION[NAME] != "") {
+      if(isset($_SESSION["NAME"]) && $SESSION["NAME"] != "") {
         echo $webui_welcome_back." ";
-        echo $_SESSION[NAME];
+        echo $_SESSION["NAME"];
         if($allowWebLogin == 'true')
         {
           echo " ";

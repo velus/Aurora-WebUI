@@ -13,7 +13,7 @@ function WriteMenu($siteid, $siteurl, $sitetarget, $a, $Display, $AdminDisplay)
 	$DbLink2->query("SELECT id,url,target FROM " . C_PAGE_TBL . " Where parent = '".cleanQuery($siteid)."' and active='1' and ((display='$Display') or (display='2') " . $AdminDisplay . ") ORDER BY rank ASC ");
 	if ($siteurl != "") {
 		if ($sitetarget == '_self') {
-			if ($_GET[btn] == $siteid) 
+			if (isset($_GET["btn"])?$_GET["btn"]:"" == $siteid) 
 			{
 				echo "<li><a href=\"#\"><span>$a[$siteid]</span></a>";
 				if ($DbLink2->num_rows() > 0)
@@ -94,12 +94,12 @@ function WriteMenu($siteid, $siteurl, $sitetarget, $a, $Display, $AdminDisplay)
     <ul id="mega-menu-<?php echo $MegaMenuPreset; ?>" class="mega-menu">
     <?php
 		$DbLink = new DB;
-		if ($_SESSION[USERID])
+		if (isset($_SESSION["USERID"]))
 			$Display = 1;
 		else
 			$Display = 0;
 		
-		if($_SESSION[ADMINID])
+		if(isset($_SESSION["ADMINID"]))
 			$AdminDisplay = " or (display='3')";
 		else
 			$AdminDisplay = "";

@@ -9,7 +9,7 @@
 
 $DbLink = new DB;
 
-$page = $_SESSION[page];
+$page = $_SESSION["page"];
 
 $DbLink->query("SELECT type, include FROM ".C_SITES_TBL." where pagecase = '".cleanQuery($page)."'");
 

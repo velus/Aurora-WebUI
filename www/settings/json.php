@@ -5,7 +5,7 @@ function do_post_request($found) {
             'method' => 'POST',
             'content' => implode(',', $found)
             ));
-    if ($optional_headers !== null) {
+    if (isset($optional_headers) && $optional_headers !== null) {
         $params['http']['header'] = $optional_headers;
     }
     $ctx = stream_context_create($params);
