@@ -100,5 +100,13 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == $webui_admin_login) {
     }
   } // LOGIN END
 
+$items = array();
+$items["home"] = 'index.php?page=home';
+$items["world"] = 'index.php?page=world';
+$items["register"] = 'index.php?page=register';
+$items["login"] = 'index.php?page=login';
+$items["help"] = 'index.php?page=help';
+$smarty->assign('menu_items', $items);
+
   include ("sites.php");
 ?>

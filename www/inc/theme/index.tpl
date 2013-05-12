@@ -55,6 +55,9 @@ $('#gridstatus1, #gridstatus2, #gridstatus3, #gridstatus4, #gridstatus5').corner
 $('#ContentHeaderLeft, #ContentHeaderCenter, #ContentHeaderRight').corner("5px");
 $('.news_time, .news_title, .news_content, #news_online').corner();
 	
+// Generic class for rounded corners
+$('.rounded-corners').corner();
+
 $(function(){
 $('#dynCorner').click(function() {
 $('#dynamic').corner();
@@ -185,10 +188,12 @@ $(document).ready(function() {
 		
     </div><!-- fin de #header -->
 
-<div id="menubar">
+<div id="menubar" class="rounded-corners">
 	<div id="menu">
 		<ul class="menu">
-			<li><a href="#">Home</a></li>
+			{foreach from=$menu_items key=name item=url}
+				<li><a class="rounded-corners" href="{$url}">{$name}</a></li>
+			{/foreach}
 		</ul>
 	</div>
 </div>

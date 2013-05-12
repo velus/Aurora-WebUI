@@ -173,7 +173,24 @@ div.scrollingtext {
 
 /* MenuBar Horizontal */
 .webui #menubar {margin-top:10px;}
+.webui #menubar ul
+{
+display: block;
+padding: 1em;
+list-style-type:none;
+	background-color: #1a1a1a;
+}
+.webui #menubar li {display:inline;}
+.webui #menubar li a {
+	color: #fff;
+	padding: 0.7em;
+	margin-right: 0.7em;
+	background-color: #000;
+}
 
+.webui #menubar li a:hover {
+	background-color: rgb(255, 165, 0);
+}
 
 /* content*/
 .webui #content {
