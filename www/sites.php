@@ -15,7 +15,7 @@ $DbLink->query("SELECT type, include FROM ".C_SITES_TBL." where pagecase = '".cl
 
 while(list($type,$include) = $DbLink->next_record())
 {
-	include("./sites/".$type."/".$include);
+	$smarty->display("sites/$type/".basename($include, ".php").".tpl");
 	return;
 }
 
