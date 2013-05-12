@@ -30,21 +30,6 @@ $smarty->config_dir = 'inc/config';
 // display it
 //$smarty->display('index.tpl');
 
-echo "<!doctype html>";
-
-if ((empty($_GET['lang'])) && (empty($_COOKIE['lang'])))
-{
-	echo "<html lang=en class=\"no-js\">";
-}
-else if (!empty($_GET['lang']))
-{
-	echo "<html lang=".$_GET['lang']." class=\"no-js\">";
-}
-else if(!empty($_COOKIE['lang']))
-{
-	echo "<html lang=".$_COOKIE['lang']." class=\"no-js\">";
-}
-
 include("settings/config.php");
 include("settings/databaseinfo.php");
 include("settings/json.php");
@@ -115,47 +100,5 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == $webui_admin_login) {
     }
   } // LOGIN END
 
-  $DbLink->query("SELECT id,
-                         displayTopPanelSlider, 
-                         displayTemplateSelector,
-                         displayStyleSwitcher,
-                         displayStyleSizer,
-                         displayFontSizer,
-                         displayLanguageSelector,
-                         displayScrollingText,
-                         displayWelcomeMessage,
-                         displayLogo,
-                         displayLogoEffect,
-                         displaySlideShow,
-                         displayMegaMenu,
-                         displayDate,
-                         displayTime,
-                         displayRoundedCorner,
-                         displayBackgroundColorAnimation,
-                         displayPageLoadTime,
-                         displayW3c,
-                         displayRss FROM ".C_ADMINMODULES_TBL." ");
-                     
-  list($id,
-       $displayTopPanelSlider,
-       $displayTemplateSelector, 
-       $displayStyleSwitcher,
-       $displayStyleSizer,
-       $displayFontSizer,
-       $displayLanguageSelector,
-       $displayScrollingText,
-       $displayWelcomeMessage,
-       $displayLogo,
-       $displayLogoEffect,
-       $displaySlideShow,
-       $displayMegaMenu,
-       $displayDate,
-       $displayTime,
-       $displayRoundedCorner,
-       $displayBackgroundColorAnimation,
-       $displayPageLoadTime,
-       $displayW3c,
-       $displayRss) = $DbLink->next_record();
-
-	include ("sites.php");
+  include ("sites.php");
 ?>
