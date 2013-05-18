@@ -22,6 +22,11 @@
 			</td>
 		</tr>
 		{/if}
+		<tr>
+			<td colspan="2">
+			<fieldset>
+				<legend>Account Details</legend>
+				<table>
                 <tr>
                     <td class="even" width="52%"><span id="accountfirst_label">First Name*</span></td>
                     <td class="even">
@@ -81,8 +86,18 @@ value="{$values.ACCFIRST|escape}">
 			{/if}
                     </td>
                 </tr>
+		</table>
+		</fieldset>
+		</td>
+		</tr>
 
                 <?php } if ($ADRESSCHECK == "1") { ?>
+		<tr>
+			<td colspan="2">
+		<fieldset>
+			<legend>Your Address</legend>
+
+			<table>
                 <tr>
                     <td class="odd"><span id="firstname_label">First Name*</span></td>
                     <td class="odd">
@@ -141,6 +156,12 @@ value="{$values.ACCFIRST|escape}">
                         <?php echo displayCountry(); ?>
                     </td>
                 </tr>
+		</td>
+		</tr>
+		</table>
+		</fieldset>
+		</td>
+		</tr>
 		<?php } ?>
 
 		{if $options.ForceAge}
