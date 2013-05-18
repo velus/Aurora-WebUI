@@ -1,20 +1,33 @@
 {extends file="index.tpl"}
 {block name="content"}
     <div id="content">
-    
+   
+<!-- 
     <div id="ContentHeaderLeft"><h5><?php echo SYSNAME; ?></h5></div>
     <div id="ContentHeaderCenter"></div>
     <div id="ContentHeaderRight"><h5><?php echo $webui_register; ?></h5></div>
+-->
 	
     <div id="register">
         <form ACTION="index.php?page=register" METHOD="POST" onsubmit="if (!validate(this)) return false;">
             <table>
-                <tr><td class="error" colspan="2" align="center" id="error_message"><?php echo $_SESSION[ERROR]; ?><?php echo $_GET[ERROR]; ?></td></tr>
+		{if $errors}
+                <tr>
+			<td class="error" colspan="2" align="center" id="error_message">
+				<ul>
+				{foreach from=$errors item=error}
+					<li>{$error}</li>
+				{/foreach}
+				</ul>
+			</td>
+		</tr>
+		{/if}
                 <tr>
                     <td class="even" width="52%"><span id="accountfirst_label">First Name*</span></td>
                     <td class="even">
                         <div class="roundedinput">
-                            <input minlength="3" id="register_input" require="true" nospecial="true" label="accountfirst_label" name="accountfirst" type="text" size="25" maxlength="15" value="<?php echo $_SESSION[ACCFIRST]; ?>">
+                            <input minlength="3" id="register_input" require="true" nospecial="true" label="accountfirst_label" name="accountfirst" type="text" size="25" maxlength="15"
+value="{$values.ACCFIRST|escape}">
                         </div>
                     </td>
                 </tr>
@@ -71,115 +84,109 @@
 
                 <?php } if ($ADRESSCHECK == "1") { ?>
                 <tr>
-                    <td class="odd"><span id="firstname_label"><?php echo $webui_first_name; ?>*</span></td>
+                    <td class="odd"><span id="firstname_label">First Name*</span></td>
                     <td class="odd">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="firstname_label" id="register_input" name="firstname" type="text" size="25" maxlength="15" value="<?php echo $_SESSION[NAMEF]; ?>">
+                            <input require="true" nospecial="true" label="firstname_label" id="register_input" name="firstname" type="text" size="25" maxlength="15" value="{$values.NAMEF|escape}">
                         </div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="even"><span id="lastname_label"><?php echo $webui_last_name; ?>*</span></td>
+                    <td class="even"><span id="lastname_label">Last Name*</span></td>
                     <td class="even">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="lastname_label" id="register_input" name="lastname" type="text" size="25" maxlength="15" value="<?php echo $_SESSION[NAMEL]; ?>">
+                            <input require="true" nospecial="true" label="lastname_label" id="register_input" name="lastname" type="text" size="25" maxlength="15" value="{$values.NAMEL|escape}">
                         </div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="odd"><span id="adress_label"><?php echo $webui_address; ?>*</span></td>
+                    <td class="odd"><span id="adress_label">Address*</span></td>
                     <td class="odd">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="adress_label" id="register_input" name="adress" type="text" size="50" maxlength="50" value="<?php echo $_SESSION[ADRESS]; ?>">
+                            <input require="true" nospecial="true" label="adress_label" id="register_input" name="adress" type="text" size="50" maxlength="50" value="{$values.ADDRESS}">
                         </div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="even"><span id="zip_label"><?php echo $webui_zip_code; ?>*</span></td>
+                    <td class="even"><span id="zip_label">Zip Code*</span></td>
                     <td class="even">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="zip_label" id="register_input" name="zip" type="text" size="25" maxlength="15" value="<?php echo $_SESSION[ZIP]; ?>">
+                            <input require="true" nospecial="true" label="zip_label" id="register_input" name="zip" type="text" size="25" maxlength="15" value="{$values.ZIP}">
                         </div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="odd"><span id="city_label"><?php echo $webui_city; ?>*</span></td>
+                    <td class="odd"><span id="city_label">City*</span></td>
                     <td class="odd">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="city_label" id="register_input" name="city" type="text" size="25" maxlength="15" value="<?php echo $_SESSION[CITY]; ?>">
+                            <input require="true" nospecial="true" label="city_label" id="register_input" name="city" type="text" size="25" maxlength="15" value="{$values.CITY}">
                         </div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="even"><span id="country_label"><?php echo $webui_country; ?>*</span></td>
+                    <td class="even"><span id="country_label">Country*</span></td>
                     <td class="even">
-			**BROKEN BY WEBPIGEON -- NEEDS FIX**
+			{if $countries}
+				<select>
+					{foreach from=$countries item=country}
+						<option>{$country}</option>
+					{/foreach}
+				</select>
+			{/if}
                         <?php echo displayCountry(); ?>
                     </td>
                 </tr>
+		<?php } ?>
 
+		{if $options.ForceAge}
                 <tr>
-                    <td class="odd"><span id="dob_label"><?php echo $webui_date_of_birth; ?>*</span></td>
+                    <td class="odd"><span id="dob_label">Date Of Birth*</span></td>
                     <td class="odd">
-			**BROKEN BY WEBPIGEON -- NEEDS FIX**
-                        <?php echo displayDOB(); ?>
+			{html_select_date prefix="born_" start_year="1900" end_year="2009" field_order="YMD"}
                     </td>
                 </tr>
-
-                <?php } else if ($FORCEAGE == "1"){ ?>
-
-                <tr>
-                    <td class="odd"><span id="dob_label"><?php echo $webui_date_of_birth; ?>*</span></td>
-                    <td class="odd">
-			**BROKEN BY WEBPIGEON - NEEDS FIX**
-                        <?php echo displayDOB(); ?>
-                    </td>
-                </tr>
-
-                <?php } ?>
+		{/if}
 
                 <tr>
-                    <td class="odd"><span id="email_label"><?php echo $webui_email; ?>*</span></td>
+                    <td class="odd"><span id="email_label">Email Address*</span></td>
                     <td class="odd">
                         <div class="roundedinput">
-                            <input compare="emaic" require="true" nospecial="true" label="email_label" id="register_input" name="email" type="text" size="40" maxlength="40" value="<?php echo $_SESSION[EMAIL]; ?>">
+                            <input compare="emaic" require="true" nospecial="true" label="email_label" id="register_input" name="email" type="text" size="40" maxlength="40" value="{$values.EMAIL}">
                         </div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="even"><span id="emaic_label"><?php echo $webui_confirm; ?> <?php echo $webui_email; ?>*</span></td>
+                    <td class="even"><span id="emaic_label">Confirm Email Address*</span></td>
                     <td class="even">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="emaic_label" id="register_input" name="emaic" type="text" size="40" maxlength="40" value="<?php echo $_SESSION[EMAIC]; ?>" >
+                            <input require="true" nospecial="true" label="emaic_label" id="register_input" name="emaic" type="text" size="40" maxlength="40" value="{$values.EMAIC}" >
                         </div>
                     </td>
                 </tr>
 
                 <?php displayDefaultAvatars(); ?>
 
-                <?php if( file_exists( $_SERVER{'DOCUMENT_ROOT'} . "/TOS.php"))  { ?>
-
+		{if $terms_of_service}
                 <tr>
                     <td class="even" colspan="2">
                         <div style="width:100%;height:300px;overflow:auto;">
-                            **TOS GOES HERE**
+                            {$terms_of_service}
                         </div>
                     </td>
                 </tr>
 
                 <tr>
                     <td colspan="2" valign="top" class="odd"><input label="agree_label" require="true" type="checkbox" name="Agree_with_TOS" id="agree" value="1" />
-                        <label for="agree"><span id="agree_label"><?php echo $site_terms_of_service_agree; ?></span></label>
+                        <label for="agree"><span id="agree_label">I agree to the terms of service</span></label>
                     </td>
                 </tr>
-
-                <?php } ?>
+                {/if}
 
                 <tr>
                     <td class="even">

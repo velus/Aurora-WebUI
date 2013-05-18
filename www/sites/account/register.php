@@ -1,10 +1,56 @@
 <?php
 $DbLink = new DB;
 $DbLink->query("SELECT adress,region,allowRegistrations,verifyUsers,ForceAge FROM " . C_ADM_TBL . "");
-list($ADRESSCHECK, $REGIOCHECK, $ALLOWREGISTRATION, $VERIFYUSERS, $FORCEAGE) = $DbLink->next_record();
+$db_options = $DbLink->next_record();
+$smarty->assign("options", $db_options);
 
+if ( !isset($db_options["allowRegistrations"]) || !$db_options["allowRegistrations"] ) {
+	$smarty->display("sites/account/register-disabled.tpl");
+	die();
+}
+
+$defaults = array();
+$defaults["ACCFIRST"] = "";
+$defaults["ACCLAST"] = "";
+$defaults["WORDPASS"] = "";
+$defaults["WORDPASS_CONFIRM"] = "";
+$defaults["FIRSTREGION"] = "";
+$defaults["LASTREGION"] = "";
+$defaults["NAMEF"] = "";
+$defaults["NAMEL"] = "";
+$defaults["ADDRESS"] = "";
+$defaults["ZIP"] = "";
+$defaults["CITY"] = "";
+$defaults["COUNTRY"] = "";
+$defaults["DOB"] = "";
+$defaults["EMAIL"] = "";
+$defaults["EMAIC"] = "";
+$defaults["TOS_AGREE"] = false;
+
+$values = array_merge($defaults, $_POST);
+
+function validate_form($values) {
+	$errors = array();
+
+	foreach( $values as $field => $value ) {
+		if ( empty($value) || $value ) {
+			$errors[$field] = "$field is missing";
+		}
+	}
+
+	return $errors;
+}
+
+$errors = array();
+if ( isset($_POST) && !empty($_POST) ) {
+	//the form was submitted
+	$errors = validate_form($values);
+}
+$smarty->assign("errors", $errors);
+$smarty->assign("values", $values);
 
 //populate the last_names for the view
+//TODO i need to detect if the dropdown is enabled
 $DbLink->query("SELECT name FROM ". C_NAMES_TBL ." WHERE active=1 ORDER BY name ASC");
 $lastNames = array();
 while ( list($NAMEDB) = $DbLink->next_record() ) {
@@ -15,13 +61,27 @@ $smarty->assign("last_names", $lastNames);
 
 //populate the regions for the view
 //XXX this won't work - it needs the regions table from the real server app
-$DbLink->query("SELECT RegionName,RegionUUID FROM " . C_REGIONS_TBL . " ORDER BY RegionName ASC ");
+//TODO i need to add the ability to detect if dropdown is enabled
+//$DbLink->query("SELECT RegionName,RegionUUID FROM " . C_REGIONS_TBL . " ORDER BY RegionName ASC ");
 $regions = array();
-while (list($RegionName, $RegionHandle) = $DbLink->next_record()) {
-	$regions[$RegionName] = $RegionHandle;
-}
+//while (list($RegionName, $RegionHandle) = $DbLink->next_record()) {
+//	$regions[$RegionName] = $RegionHandle;
+//}
 $smarty->assign("regions", $regions);
 
+
+//populate the countries for the view
+$countries = array();
+$DbLink->query("SELECT name FROM " . C_COUNTRY_TBL . " ORDER BY name ASC ");
+while (list($COUNTRYDB) = $DbLink->next_record()) {
+	$countries[] = $COUNTRYDB;
+}
+$smarty->assign("countries", $countries);
+
+//Terms of Service
+//TODO i need to import the terms of service
+$terms_of_service = "I need to import this...";
+$smarty->assign("terms_of_service", $terms_of_service);
 
 // Get IP Adress
 if ($_SERVER["HTTP_X_FORWARDED_FOR"]) {
@@ -32,6 +92,8 @@ if ($_SERVER["HTTP_X_FORWARDED_FOR"]) {
     $userIP = "This user has no ip";
 }
 
+return;
+
 if($ALLOWREGISTRATION == '1')
 {
 
@@ -39,32 +101,6 @@ if ($_POST[action] == "") {
     $_SESSION[PASSWD] = "";
     $_SESSION[EMAIC] = "";
 	
-	
-function printLastNames()
-{
-	$DbLink = new DB;
-	$DbLink->query("SELECT lastnames FROM " . C_ADM_TBL . "");
-	list($LASTNAMESC) = $DbLink->next_record();
-	if ($LASTNAMESC == "1") {
-		echo "<div class=\"roundedinput\"><select id=\"register_input\" wide=\"25\" name=\"accountlast\">";
-		$DbLink->query("SELECT name FROM " . C_NAMES_TBL . " WHERE active=1 ORDER BY name ASC ");
-		while (list($NAMEDB) = $DbLink->next_record()) {
-			echo "<option>$NAMEDB</option>";
-		}
-		echo "</select></div>";
-	} else {
-		echo "<div class=\"roundedinput\"><input minlength=\"3\" require=\"true\" nospecial=\"true\" label=\"accountlast_label\" id=\"register_input\" name=\"accountlast\" type=\"text\" size=\"25\" maxlength=\"15\" value=\"$_SESSION[ACCLAST]\" /></div>";
-	}
-}
-
-
-function displayRegions()
-{
-	$DbLink = new DB;
-	echo "<div class=\"roundedinput\"><select require=\"true\" label=\"startregion_label\" id=\"register_input\" wide=\"25\" name=\"startregion\">";
-	echo "</select></div>";
-}
-
 
 function displayCountry()
 {
@@ -345,6 +381,7 @@ return;
 
 <?php } else if ($_POST[action] == "check") 
 {
+	return;
 	$_SESSION[ACCFIRST] = $_POST[accountfirst];
 	$_SESSION[ACCFIRSL] = strtolower($_POST[accountfirst]);
 	$_SESSION[ACCLAST] = $_POST[accountlast];
@@ -398,7 +435,7 @@ return;
 			session_unset();
 			session_destroy();
 			$_SESSION = array();
-			header("Location: Index.php?page=register&ERROR=Sorry, you must be 18 to sign up.");
+			//header("Location: Index.php?page=register&ERROR=Sorry, you must be 18 to sign up.");
 			exit();
 		}
 	}
