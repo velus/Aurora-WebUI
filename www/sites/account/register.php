@@ -3,6 +3,26 @@ $DbLink = new DB;
 $DbLink->query("SELECT adress,region,allowRegistrations,verifyUsers,ForceAge FROM " . C_ADM_TBL . "");
 list($ADRESSCHECK, $REGIOCHECK, $ALLOWREGISTRATION, $VERIFYUSERS, $FORCEAGE) = $DbLink->next_record();
 
+
+//populate the last_names for the view
+$DbLink->query("SELECT name FROM ". C_NAMES_TBL ." WHERE active=1 ORDER BY name ASC");
+$lastNames = array();
+while ( list($NAMEDB) = $DbLink->next_record() ) {
+	$lastNames[] = $NAMEDB;
+}
+$smarty->assign("last_names", $lastNames);
+
+
+//populate the regions for the view
+//XXX this won't work - it needs the regions table from the real server app
+$DbLink->query("SELECT RegionName,RegionUUID FROM " . C_REGIONS_TBL . " ORDER BY RegionName ASC ");
+$regions = array();
+while (list($RegionName, $RegionHandle) = $DbLink->next_record()) {
+	$regions[$RegionName] = $RegionHandle;
+}
+$smarty->assign("regions", $regions);
+
+
 // Get IP Adress
 if ($_SERVER["HTTP_X_FORWARDED_FOR"]) {
     $userIP = $_SERVER["HTTP_X_FORWARDED_FOR"];
@@ -42,10 +62,6 @@ function displayRegions()
 {
 	$DbLink = new DB;
 	echo "<div class=\"roundedinput\"><select require=\"true\" label=\"startregion_label\" id=\"register_input\" wide=\"25\" name=\"startregion\">";
-	$DbLink->query("SELECT RegionName,RegionUUID FROM " . C_REGIONS_TBL . " ORDER BY RegionName ASC ");
-	while (list($RegionName, $RegionHandle) = $DbLink->next_record()) {
-		echo "<option value=\"$RegionHandle\">$RegionName</option>";
-	}
 	echo "</select></div>";
 }
 
@@ -138,6 +154,8 @@ function displayDefaultAvatars()
 		echo "</td></tr>";
 	}
 }
+
+return;
 ?>
 
     <div id="content">
