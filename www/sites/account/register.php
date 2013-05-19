@@ -10,22 +10,21 @@ if ( !isset($db_options["allowRegistrations"]) || !$db_options["allowRegistratio
 }
 
 $defaults = array();
-$defaults["ACCFIRST"] = "";
-$defaults["ACCLAST"] = "";
-$defaults["WORDPASS"] = "";
-$defaults["WORDPASS_CONFIRM"] = "";
-$defaults["FIRSTREGION"] = "";
-$defaults["LASTREGION"] = "";
-$defaults["NAMEF"] = "";
-$defaults["NAMEL"] = "";
-$defaults["ADDRESS"] = "";
-$defaults["ZIP"] = "";
-$defaults["CITY"] = "";
-$defaults["COUNTRY"] = "";
+$defaults["account_fname"] = "";
+$defaults["account_lname"] = "";
+$defaults["password"] = "";
+$defaults["password_confirm"] = "";
+$defaults["account_startregion"] = "";
+$defaults["player_fname"] = "";
+$defaults["player_lname"] = "";
+$defaults["player_address"] = "";
+$defaults["player_zip"] = "";
+$defaults["player_city"] = "";
+$defaults["player_country"] = "";
 $defaults["DOB"] = "";
-$defaults["EMAIL"] = "";
-$defaults["EMAIC"] = "";
-$defaults["TOS_AGREE"] = false;
+$defaults["email"] = "";
+$defaults["email_confirm"] = "";
+$defaults["terms_agree"] = false;
 
 $values = array_merge($defaults, $_POST);
 
@@ -37,6 +36,16 @@ function validate_form($values) {
 			$errors[$field] = "$field is missing";
 		}
 	}
+
+	if ($values["email"] != $values["email_confirm"]) {
+		$errors["email_validate"] = "Email and email confrim don't match";
+	}
+
+	if ($values["password"] != $values["password_confirm"]) {
+		$errors["password_validate"] = "Password and password confirm don't match";
+	}
+
+	//TODO agecheck
 
 	return $errors;
 }
@@ -54,7 +63,7 @@ $smarty->assign("values", $values);
 $DbLink->query("SELECT name FROM ". C_NAMES_TBL ." WHERE active=1 ORDER BY name ASC");
 $lastNames = array();
 while ( list($NAMEDB) = $DbLink->next_record() ) {
-	$lastNames[] = $NAMEDB;
+	$lastNames[$NAMEDB] = $NAMEDB;
 }
 $smarty->assign("last_names", $lastNames);
 

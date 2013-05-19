@@ -9,7 +9,7 @@
 -->
 	
     <div id="register">
-        <form ACTION="index.php?page=register" METHOD="POST" onsubmit="if (!validate(this)) return false;">
+        <form ACTION="index.php?page=register" METHOD="POST">
             <table>
 		{if $errors}
                 <tr>
@@ -31,8 +31,8 @@
                     <td class="even" width="52%"><span id="accountfirst_label">First Name*</span></td>
                     <td class="even">
                         <div class="roundedinput">
-                            <input minlength="3" id="register_input" require="true" nospecial="true" label="accountfirst_label" name="accountfirst" type="text" size="25" maxlength="15"
-value="{$values.ACCFIRST|escape}">
+                            <input minlength="3" id="register_input" require="true" nospecial="true" label="accountfirst_label" name="account_fname" type="text" size="25" maxlength="15"
+value="{$values.account_fname|escape}">
                         </div>
                     </td>
                 </tr>
@@ -40,15 +40,13 @@ value="{$values.ACCFIRST|escape}">
                 <tr>
                     <td class="odd"><span id="accountlast_label">Last name*</span></td>
                     <td class="odd">
-			{if $last_names}
-                        <select>
-				{foreach from=$last_names item=last_name}
-				<option>{$last_name}</option>
-				{/foreach}
-			</select>
-			{else}
-			<input />
-			{/if}
+			<div class="roundedinput">
+				{if $last_names}
+					{html_options name=account_lname options=$last_names selected=$values.account_lname}
+				{else}
+					<input />
+				{/if}
+			</div>
                     </td>
                 </tr>
 
@@ -56,7 +54,7 @@ value="{$values.ACCFIRST|escape}">
                     <td class="even"><span id="wordpass_label">Password*</span></td>
                     <td class="even">
                         <div class="roundedinput">
-                            <input minlength="6" compare="wordpass2" require="true" nospecial="true" label="wordpass_label" id="register_input" name="wordpass" type="password" size="25" maxlength="15">
+				<input type="password" name="password" />
                         </div>
                     </td>
                 </tr>
@@ -65,7 +63,7 @@ value="{$values.ACCFIRST|escape}">
                     <td class="odd"><span id="wordpass2_label">Confirm Password*</span></td>
                     <td class="odd">
                         <div class="roundedinput">
-                            <input minlength="6" require="true" nospecial="true" label="wordpass2_label" id="register_input" name="wordpass2" type="password" size="25" maxlength="15">
+				<input type="password" name="password_confirm" />
                         </div>
                     </td>
                 </tr>
@@ -76,7 +74,7 @@ value="{$values.ACCFIRST|escape}">
                     <td class="even"><span id="startregion_label">Start Region*</span></td>
                     <td class="even">
 			{if $last_names}
-                        <select>
+                        <select name="account_startregion">
 				{foreach from=$regions key=region_key item=region_value}
 				<option name={$region_key}>{$region_value}</option>
 				{/foreach}
@@ -99,10 +97,10 @@ value="{$values.ACCFIRST|escape}">
 
 			<table>
                 <tr>
-                    <td class="odd"><span id="firstname_label">First Name*</span></td>
+                    <td class="odd" style="width:52%"><span id="firstname_label">First Name*</span></td>
                     <td class="odd">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="firstname_label" id="register_input" name="firstname" type="text" size="25" maxlength="15" value="{$values.NAMEF|escape}">
+				<input value="{$values.player_fname|escape}" name="player_fname" />
                         </div>
                     </td>
                 </tr>
@@ -111,7 +109,7 @@ value="{$values.ACCFIRST|escape}">
                     <td class="even"><span id="lastname_label">Last Name*</span></td>
                     <td class="even">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="lastname_label" id="register_input" name="lastname" type="text" size="25" maxlength="15" value="{$values.NAMEL|escape}">
+				<input value="{$values.player_lname|escape}" name="player_lname" />
                         </div>
                     </td>
                 </tr>
@@ -120,7 +118,7 @@ value="{$values.ACCFIRST|escape}">
                     <td class="odd"><span id="adress_label">Address*</span></td>
                     <td class="odd">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="adress_label" id="register_input" name="adress" type="text" size="50" maxlength="50" value="{$values.ADDRESS}">
+				<input value="{$values.player_address|escape}" name="player_address" />
                         </div>
                     </td>
                 </tr>
@@ -129,7 +127,7 @@ value="{$values.ACCFIRST|escape}">
                     <td class="even"><span id="zip_label">Zip Code*</span></td>
                     <td class="even">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="zip_label" id="register_input" name="zip" type="text" size="25" maxlength="15" value="{$values.ZIP}">
+				<input value="{$values.player_zip|escape}" name="player_zip" />
                         </div>
                     </td>
                 </tr>
@@ -138,7 +136,7 @@ value="{$values.ACCFIRST|escape}">
                     <td class="odd"><span id="city_label">City*</span></td>
                     <td class="odd">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="city_label" id="register_input" name="city" type="text" size="25" maxlength="15" value="{$values.CITY}">
+				<input value="{$values.player_city}" name="player_city" />
                         </div>
                     </td>
                 </tr>
@@ -146,14 +144,9 @@ value="{$values.ACCFIRST|escape}">
                 <tr>
                     <td class="even"><span id="country_label">Country*</span></td>
                     <td class="even">
-			{if $countries}
-				<select>
-					{foreach from=$countries item=country}
-						<option>{$country}</option>
-					{/foreach}
-				</select>
-			{/if}
-                        <?php echo displayCountry(); ?>
+			<div class="roundedinput">
+				{html_options name=player_country options=$countries selected=$values.player_country}
+			</div>
                     </td>
                 </tr>
 		</td>
@@ -177,7 +170,7 @@ value="{$values.ACCFIRST|escape}">
                     <td class="odd"><span id="email_label">Email Address*</span></td>
                     <td class="odd">
                         <div class="roundedinput">
-                            <input compare="emaic" require="true" nospecial="true" label="email_label" id="register_input" name="email" type="text" size="40" maxlength="40" value="{$values.EMAIL}">
+                            <input compare="emaic" require="true" nospecial="true" label="email_label" id="register_input" name="email" type="text" size="40" maxlength="40" value="{$values.email|escape}">
                         </div>
                     </td>
                 </tr>
@@ -186,7 +179,7 @@ value="{$values.ACCFIRST|escape}">
                     <td class="even"><span id="emaic_label">Confirm Email Address*</span></td>
                     <td class="even">
                         <div class="roundedinput">
-                            <input require="true" nospecial="true" label="emaic_label" id="register_input" name="emaic" type="text" size="40" maxlength="40" value="{$values.EMAIC}" >
+                            <input require="true" nospecial="true" label="emaic_label" id="register_input" name="email_confirm" type="text" size="40" maxlength="40" value="{$values.email_confirm|escape}" >
                         </div>
                     </td>
                 </tr>
@@ -203,7 +196,7 @@ value="{$values.ACCFIRST|escape}">
                 </tr>
 
                 <tr>
-                    <td colspan="2" valign="top" class="odd"><input label="agree_label" require="true" type="checkbox" name="Agree_with_TOS" id="agree" value="1" />
+                    <td colspan="2" valign="top" class="odd"><input label="agree_label" require="true" type="checkbox" name="terms_agree" id="agree" value="1" />
                         <label for="agree"><span id="agree_label">I agree to the terms of service</span></label>
                     </td>
                 </tr>
@@ -219,8 +212,7 @@ value="{$values.ACCFIRST|escape}">
 
                     <td class="even">
                         <div class="center">
-                            <input type="hidden" name="action" value="check">
-                            <button id="register_bouton" name="submit" type="submit">Create New Account</button>
+                            <button id="register_bouton" type="submit">Create New Account</button>
                         </div>
                     </td>
                 </tr>
