@@ -9,13 +9,19 @@
 
 $DbLink = new DB;
 
-$page = $_SESSION[page];
+$page = $_SESSION["page"];
 
 $DbLink->query("SELECT type, include FROM ".C_SITES_TBL." where pagecase = '".cleanQuery($page)."'");
 
 while(list($type,$include) = $DbLink->next_record())
 {
-	include("./sites/".$type."/".$include);
+	//FIXME this is not a good way of doing things but it's needed until there is a proper framework in place
+	$page_name = basename($include, ".php");
+	$path = "sites/$type/$page_name.php";
+	if ( file_exists($path) ) {
+		include("sites/$type/".$page_name.".php");
+	}
+	$smarty->display("sites/$type/".$page_name.".tpl");
 	return;
 }
 
